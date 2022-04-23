@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title %}
+{% block content %}
+      <!--Navbar-->
+      <nav class="navbar navbar-expand-lg navbar-dark mdb-color lighten-3 mt-3 mb-5">
+
+        <!-- Navbar brand -->
+        <span class="navbar-brand">Categories:</span>
+
+        <!-- Collapse button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+          aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Collapsible content -->
+        <div class="collapse navbar-collapse" id="basicExampleNav">
+
+          <!-- Links -->
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'home' %}">All
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'allproducts' %}?action=book">Book</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'allproducts' %}?action=clothes">Clothes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'allproducts' %}?action=electronic">Electronic</a>
+            </li>
+
+          </ul>
+          <!-- Links -->
+
+          {% comment %} <form class="form-inline" action="{% url 'search' %}">
+            <div class="md-form my-0">
+              <input name="keyword" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+            </div>
+          </form> {% endcomment %}
+        </div>
+        <!-- Collapsible content -->
+
+      </nav>
+      <!--/.Navbar-->
+
+      <section class="text-center mb-4">
+        <div class="row wow fadeIn">
+          {% for product in products %}
+          <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card">
+              <div class="view overlay">
+                
+                <a href="{% url 'product-detail' product.slug %}">
+                  <img src="{{product.image.url}}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                  <div class="mask rgba-white-slight"></div>
+                </a>
+              </div>
+              <div class="card-body text-center">
+                <a href="{% url 'product-detail' product.slug %}" class="grey-text">
+                  <h5>{{product.category.title}}</h5>
+                </a>
+                <h5>
+                  <strong>
+                    <a href="{% url 'product-detail' product.slug %}" class="dark-grey-text">{{product.title}}
+                      <span class="badge badge-pill danger-color">NEW</span>
+                    </a>
+                  </strong>
+                </h5>
+                <h4 class="font-weight-bold blue-text">
+                  {% if product.price.selling_price != product.price.marked_price %}
+                  <del>{{product.price.marked_price}} VNĐ</del>
+                  <hr>
+                  <strong>{{product.price.selling_price}} VNĐ</strong>
+                  {% else %}
+                  <hr>
+                  <strong>{{product.price.marked_price}} VNĐ</strong>
+                  {% endif %}
+                </h4>
+
+              </div>
+              <!--Card content-->
+
+            </div>
+            <!--Card-->
+
+          </div>
+          {% endfor %}
+
+        </div>
+      </section>
+      <!--Section: Products v.3-->
+
+      <!--Pagination-->
+      <nav class="d-flex justify-content-center wow fadeIn">
+        <ul class="pagination pg-blue">
+
+          <!--Arrow left-->
+          <li class="page-item disabled">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </li>
+
+          <li class="page-item active">
+            <a class="page-link" href="#">1
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">2</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">3</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">4</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">5</a>
+          </li>
+
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">Next</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!--Pagination-->
+
+  <!--Main layout-->
+{% endblock content %}
+

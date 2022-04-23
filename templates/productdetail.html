@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}{{product.title}}{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h3>Product: {{product.title}}</h3><hr>
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{product.image.url}}" alt="" class="img-fluid">
+            <div class="row">
+                {% for pi in product.productimage_set.all %}
+                <div class="col-md-4 p-3">
+                    <a href="{{pi.image.url}}" target="_blank">
+                        <img src="{{pi.image.url}}" class="img-fluid" style="height: 100px; object-fit: contain;" alt="">
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h4>{{product.title}} (Viewed {{product.view_count}} times)</h4>
+            <h5>Category: {{product.category}}</h5>
+            <h5>Price: <strike>{{product.price.marked_price}} VNĐ</strike> {{product.price.selling_price}} VNĐ</h5>
+            <a href="{% url 'addtocart' product.id %}" class="btn btn-info">Add To Cart</a>
+            <hr>
+            <p class="text-info">Warranty: {{product.warranty.warranty}}</p>
+            <p class="text-info">Return Policy:{{product.warranty.return_policy}}</p>
+            <hr>
+            <p>{{product.description}}</p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="review">
+                <h3>Review</h3>
+                <hr>
+                {% for comment in comments %}
+                <div class="single-review">
+                    <div>customer: {{comment.customer.user.username}}</div>
+                    <div>title: {{comment.title}}</div>
+                    <div>create at: {{comment.create_at}}</div>
+                    <div class="review-rating pull-right">
+                        <i class="fa fa-star{% if comment.rate < 1 %}-o empty{% endif %}"></i>
+                        <i class="fa fa-star{% if comment.rate < 2 %}-o empty{% endif %}"></i>
+                        <i class="fa fa-star{% if comment.rate < 3 %}-o empty{% endif %}"></i>
+                        <i class="fa fa-star{% if comment.rate < 4 %}-o empty{% endif %}"></i>
+                        <i class="fa fa-star{% if comment.rate < 5 %}-o empty{% endif %}"></i>
+                    </div>
+                    <div class="review-body">
+                        <p>comment: {{comment.comment}}</p>
+                    </div>
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
+        <div class = "col-md-6">
+            <h4 class="tex-uppercase">Write Your Review</h4>
+            <p></p>
+            <form method="POST" action="{% url 'add-comment' product.slug %}" class="review-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="title" class="input" placeholder="Title"/>
+                </div>
+                <div class="form-gourp">
+                    <textarea name="comment" class="input" placeholder="Your comment"></textarea>
+                </div>
+                <div class="form-gourp">
+                    <div class="input-rating">
+                        <strong class="text-uppercase">Your Rating</strong>
+                        <div class="stars">
+                            <input type="radio" name="rate" id="star1" value="1"/><label for="star1"></label>
+                            <input type="radio" name="rate" id="star2" value="2"/><label for="star2"></label>
+                            <input type="radio" name="rate" id="star3" value="3"/><label for="star3"></label>
+                            <input type="radio" name="rate" id="star4" value="4"/><label for="star4"></label>
+                            <input type="radio" name="rate" id="star5" value="5"/><label for="star5"></label>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+
+
+</div>
+{% endblock content %}
